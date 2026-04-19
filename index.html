@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>صفحة تجريبية</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+    }
+    header {
+      background: #333;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+        align-items: center;
+      justify-content: center;
+      margin-top: 50px;
+      gap: 20px;
+    }
+    .box {
+      width: 150px;
+      height: 100px;
+      background: #4CAF50;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .box:hover {
+      background: #45a049;
+    }
+    textarea {
+      width: 80%;
+      height: 150px;
+      margin-top: 20px;
+      display: none;
+    }
+    button {
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header> <img src="IMG-20260418-WA0008.jpg" alt="logo" width="auto" height="300"></header>
+
+  <div class="container">
+    <div class="box" onclick="openEditor(1)">دعم الطالب</div><br>
+    <div class="box" onclick="openEditor(2)">تحرير الشهادات الجامعية</div><br>
+    <div class="box" onclick="openEditor(3)">تمويل المعلم</div><br>
+    <div class="box" onclick="openEditor(4)">المنح الدولية</div><br>
+  </div>
+
+  <textarea id="editor"></textarea>
+  <button onclick="saveFile()">save</button>
+
+  <script>
+    let currentBox = null;
+
+    function openEditor(boxNumber) {
+      currentBox = boxNumber;
+      document.getElementById("editor").style.display = "block";
+      document.querySelector("button").style.display = "inline-block";
+      document.getElementById("editor").value = "";
+    }
+
+    function saveFile() {
+      const text = document.getElementById("editor").value;
+      const blob = new Blob([text], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "file" + currentBox + ".txt";
+      link.click();
+    }
+  </script>
+</body>
+</html>
