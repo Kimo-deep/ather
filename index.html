@@ -10,17 +10,46 @@
       box-sizing: border-box;
     }
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Cairo', sans-serif;
-      background: linear-gradient(135deg, #fce4ec 0%, #e3f2fd 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden; /* منع التمرير الجانبي تماماً */
-    }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Cairo', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+}
+    /* إضافة الصورة الخلفية مع الشفافية */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* ضع رابط صورتك هنا */
+  background-image: url('IMG-20260418-WA0008.jpg'); 
+  
+  background-size: cover;
+  background-position: center;
+  
+  /* تبدأ بشفافية كاملة (مخفية) */
+  opacity: 0; 
+  
+  /* نعطيها وقتاً للانتقال السلس (مثلاً ثانيتين) */
+  transition: opacity 2s ease-in-out; 
+  
+  z-index: -1;
+}
+
+/* كلاس التفعيل الذي سيضيفه الـ JavaScript */
+body.show-bg::before {
+  /* هذه هي الشفافية النهائية للصورة بعد الظهور */
+  opacity: 0.3; 
+}
 
     /* --- تأثير الستارة المتجاوب --- */
     .curtain-container {
@@ -83,7 +112,10 @@
     }
 
     .card {
-      background: white;
+      background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('IMG-20260418-WA0008.jpg');
+      background-size: cover;
+      background-position: center;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
       border-radius: 15px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
       padding: 20px;
@@ -191,19 +223,19 @@
   <div class="container">
     <div class="card" onclick="openModal('دعم الطالب', 1)">
       <div class="icon">📄</div>
-      <div class="card-text">دعم الطالب</div>
+      <div class="card-text">برنامج دعم الطالب</div>
     </div>
     <div class="card" onclick="openModal('تحرير الشهادات الجامعية', 2)">
       <div class="icon">✏️</div>
-      <div class="card-text">تحرير الشهادات الجامعية</div>
+      <div class="card-text">برنامج تحرير الشهادات الجامعية</div>
     </div>
     <div class="card" onclick="openModal('تمويل المعلم', 3)">
       <div class="icon">📚</div>
-      <div class="card-text">تمويل المعلم</div>
+      <div class="card-text">برنامج تمويل المعلم</div>
     </div>
     <div class="card" onclick="openModal('المنح الدولية', 4)">
       <div class="icon">💡</div>
-      <div class="card-text">المنح الدولية</div>
+      <div class="card-text">برنامج المنح الدولية</div>
     </div>
   </div>
 
@@ -224,13 +256,24 @@
 
     // تفعيل الحركات عند التحميل
     window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.querySelector('.curtain-container').classList.add('opened');
-        document.querySelectorAll('.card').forEach(card => {
-          card.classList.add('show');
-        });
-      }, 1000);
+  const curtain = document.querySelector('.curtain-container');
+  const cards = document.querySelectorAll('.card');
+  const body = document.body; // السطر الجديد لتعريف الجسم
+
+  // 1. انتظر ثانية واحدة ثم افتح الستارة
+  setTimeout(() => {
+    curtain.classList.add('opened');
+    
+    // 2. تفعيل ظهور الصناديق تدريجياً
+    cards.forEach(card => {
+      card.classList.add('show');
     });
+
+    // 3. تفعيل ظهور الخلفية تدريجياً (السطر الجديد)
+    body.classList.add('show-bg'); 
+    
+  }, 2000); // يمكنك زيادة هذا الوقت إذا أردت تأخير ظهور الخلفية أكثر
+});
 
     // وظائف المودال
     function openModal(title, boxNumber) {
